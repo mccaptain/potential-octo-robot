@@ -22,7 +22,7 @@ for inputFile in files:
 		ipf = open(sys.argv[1] + '/' + inputFile, 'r+w')
 		firstLine = ipf.readline()
 		firstSplit = firstLine.split(', ')
-		newFirst = "{0} \n{1} \n{2}".format(firstSplit[0], firstSplit[1], firstSplit[2])
+		newFirst = "{0} \n{1} \n{2}".format(firstSplit[1], firstSplit[0], firstSplit[2])
 		ipf.seek(0)
 		ipf.write(newFirst)
 		sys.stdout.write("{0}".format(inputFile) + "\b"*len(inputFile))
