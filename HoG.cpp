@@ -10,7 +10,7 @@ void HoG(double *pixels, double *params, int *img_size, double *dth_des, unsigne
     const float pi = 3.1415926536;
     
     int nb_bins       = (int) params[0];
-    double cwidth     =  params[1];
+    double cwidth     =  params[1]; //cell
     int block_size    = (int) params[2];
     int orient        = (int) params[3];
     double clip_val   = params[4];
@@ -109,7 +109,7 @@ void HoG(double *pixels, double *params, int *img_size, double *dth_des, unsigne
             x2   = x1+1;
             y1   = (int)floor(0.5+ y/cwidth);
             y2   = y1 + 1;
-            
+            //c is for 'center'
             Xc = (x1+1-1.5)*cwidth + 0.5;
             Yc = (y1+1-1.5)*cwidth + 0.5;
             
@@ -121,7 +121,7 @@ void HoG(double *pixels, double *params, int *img_size, double *dth_des, unsigne
             if (bin1<0){
                 bin1=nb_bins-1;
             }            
-           
+            //interpolates between the two closest bins
             h[y1][x1][bin1]= h[y1][x1][bin1]+grad_mag*(1-((x+1-Xc)/cwidth))*(1-((y+1-Yc)/cwidth))*(1-((grad_or-Oc)/bin_size));
             h[y1][x1][bin2]= h[y1][x1][bin2]+grad_mag*(1-((x+1-Xc)/cwidth))*(1-((y+1-Yc)/cwidth))*(((grad_or-Oc)/bin_size));
             h[y2][x1][bin1]= h[y2][x1][bin1]+grad_mag*(1-((x+1-Xc)/cwidth))*(((y+1-Yc)/cwidth))*(1-((grad_or-Oc)/bin_size));
@@ -174,6 +174,7 @@ void HoG(double *pixels, double *params, int *img_size, double *dth_des, unsigne
             for (unsigned int i=0; i<block_size; i++){
                 for(unsigned int j=0; j<block_size; j++){
                     for(unsigned int k=0; k<nb_bins; k++){
+						//sets the blocks in the dest vectors (return vals)
                         if (block_norm>0) dth_des[des_indx]=block[i][j][k]/block_norm;
                         else dth_des[des_indx]=0.0;
                         des_indx++;
@@ -214,11 +215,11 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
     }
     else {
         params = new double[5];
-        params[0]=9;
-        params[1]=8;
-        params[2]=2;
-        params[3]=0;
-        params[4]=0.2;
+        params[0]=9; 	//bins
+        params[1]=8; 	//cell
+        params[2]=2; 	//block
+        params[3]=0; 	//orient
+        params[4]=0.2; 	//clip
     }
     
     nb_bins       = (int) params[0];    
@@ -228,8 +229,9 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
     int hist2= 2+ceil(-0.5 + img_size[1]/params[1]);
 
     plhs[0] = mxCreateDoubleMatrix((hist1-2-(block_size-1))*(hist2-2-(block_size-1))*nb_bins*block_size*block_size, 1, mxREAL);
+	
     dth_des = mxGetPr(plhs[0]);
-    
+    //((58)*(43))*9*2*2 = 89784 / 89784
     HoG(pixels, params, img_size, dth_des, grayscale);
     if (nrhs==1) delete[] params;
 }
