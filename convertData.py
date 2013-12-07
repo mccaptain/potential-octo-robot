@@ -21,7 +21,7 @@ for inputFile in files:
 	if len(inputFile) == 10 and inputFile.split('.')[1] == 'txt':
 		ipf = open(sys.argv[1] + '/' + inputFile, 'r+w')
 		firstLine = ipf.readline()
-		firstSplit = firstLine.split(', ')
+		firstSplit =  firstLine.split(', ')
 		newFirst = "{0} \n{1} \n{2}".format(firstSplit[1], firstSplit[0], firstSplit[2])
 		ipf.seek(0)
 		ipf.write(newFirst)
