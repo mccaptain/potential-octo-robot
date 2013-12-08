@@ -21,11 +21,17 @@ for i = 1:numFiles
             boundingBox = annotation.annotation.object{1,j}.bndbox;
         end
         if strcmpi( thisFeature, feature) && strcmpi( thisPose, pose )
+            imgSize = annotation.annotation.size;
             filenames = [filenames; annotation.annotation.filename.Text];
-            xmin = [xmin; str2num(boundingBox.xmin.Text)];
-            ymin = [ymin; str2num(boundingBox.ymin.Text)];
-            xmax = [xmax; str2num(boundingBox.xmax.Text)];
-            ymax = [ymax; str2num(boundingBox.ymax.Text)];
+            thisXMin = str2num(boundingBox.xmin.Text);
+            thisYMin = str2num(boundingBox.ymin.Text);
+            thisXMax = str2num(boundingBox.xmax.Text);
+            thisYMax = str2num(boundingBox.ymax.Text);
+            hogCoordinates = getHogDimensions( str2num(imgSize.width.Text),str2num(imgSize.height.Text),(thisXMax - thisXMin), (thisYMax - thisYMin), thisXMin, thisYMin, thisXMax, thisYMax);
+            xmin = [xmin; hogCoordinates(1) ];
+            ymin = [ymin; hogCoordinates(2) ];
+            xmax = [xmax; hogCoordinates(3) ];
+            ymax = [ymax; hogCoordinates(4) ];
         end
     end
 end
