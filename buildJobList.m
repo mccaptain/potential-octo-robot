@@ -1,5 +1,6 @@
-voc_path = 'P:\prec\VOCtest_06-Nov-2007\VOCdevkit\VOC2007\';
-folder_path = strcat(voc_path, 'Annotations');
+function [ output ] = buildJobList(vocpath, hogpath)
+output = [];
+folder_path = strcat(vocpath, 'Annotations');
 objcount = 1;
 files = dir( fullfile(folder_path, '*.xml'));
 numFiles = numel(files);
@@ -9,7 +10,7 @@ things = [ugh];
 for i = 1:numFiles
     annotation = xml2struct( files(i).name );
     numObjects = numel(annotation.annotation.object); 
-    imgpath = strcat(voc_path, 'JPEGImages\', annotation.annotation.filename.Text );
+    imgpath = strcat(vocpath, 'JPEGImages\', annotation.annotation.filename.Text );
     image=imread(imgpath);
     [y,x,z]=size(image);
     for j = 1:numObjects
@@ -23,7 +24,7 @@ for i = 1:numFiles
             boundingBox = annotation.annotation.object{1,j}.bndbox; 
         end
         abasename = textscan(annotation.annotation.filename.Text,'%s',1,'delimiter','.');
-        ahogfile = strcat('P:\HoGOutput\HoGOutput\', abasename{1}, '.txt');
+        ahogfile = strcat(hogpath, abasename{1}, '.txt');
         hogdat = readHoG( ahogfile{1} );
         a = sscanf(boundingBox.xmin.Text, '%d');
         b = sscanf(boundingBox.ymin.Text, '%d');
@@ -34,4 +35,6 @@ for i = 1:numFiles
         things(objcount,:) = obj;
         objcount = objcount + 1;
     end
+end
+    output.data = things;
 end
