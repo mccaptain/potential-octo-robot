@@ -2,6 +2,11 @@ vocpath = 'P:\prec\VOCtest_06-Nov-2007\VOCdevkit\VOC2007\';
 hogpath = 'P:\HoGOutput\HoGOutput\';
 disp(vocpath);
 disp(hogpath);
+
+disp('making HoG Features for all images');
+bossHog(vocpath,hogpath);
+disp(strcat('hog files created @ ', hogpath));
+
 disp('making job list');
 things = buildJobList(vocpath, hogpath);
 disp('making job list complete');

@@ -1,8 +1,8 @@
-% function [] = bossHoG( imageFolder )
+ function [] = bossHoG( imageFolder, outputFolder )
 %UNTITLED Summary of this function goes here
 %   Detailed explanation goes here
-imageFolder = fullfile('C:\mg');
-outputFolder = 'HoGOutput';
+%imageFolder = fullfile('C:\mg');
+%outputFolder = 'HoGOutput';
 
 imageList = dir(imageFolder);
 nb_bins = 9;
@@ -28,5 +28,5 @@ for i=1:length(imageList)
 end
  
 
-%end
+end
 
