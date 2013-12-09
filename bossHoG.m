@@ -1,7 +1,7 @@
-function [] = bossHoG( imageFolder )
+% function [] = bossHoG( imageFolder )
 %UNTITLED Summary of this function goes here
 %   Detailed explanation goes here
-
+imageFolder = fullfile('C:\mg');
 outputFolder = 'HoGOutput';
 
 imageList = dir(imageFolder);
@@ -16,9 +16,9 @@ for i=1:length(imageList)
         tempFile = fopen(strcat(outputFolder, '/', imageList(i).name), 'w');
         x = size(tempImage, 1);
         y = size(tempImage, 2);
-        hist1 = ceil(-0.5 + x / cell_width) - 1 - block_size + 1;
-        hist2 = ceil(-0.5 + y / cell_width) - 1 - block_size + 1;
-        fprintf(tempFile, '%d, %d, %d\n', hist1*block_size, hist2*block_size, nb_bins);
+        hist1 = ceil(-0.5 + x / cell_width) - 1 - block_size + 1 + 1;
+        hist2 = ceil(-0.5 + y / cell_width) - 1 - block_size + 1 + 1;
+        fprintf(tempFile, '%d\n%d\n%d\n', hist2*block_size, hist1*block_size, nb_bins);
         tempHoGs = HoG(double(tempImage));
         for j = 1:length(tempHoGs)
             fprintf(tempFile,'%f\n',tempHoGs(j));
@@ -26,7 +26,7 @@ for i=1:length(imageList)
         fclose(tempFile);
     end
 end
+ 
 
-
-end
+%end
 
